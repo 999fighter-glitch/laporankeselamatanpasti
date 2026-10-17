@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAPORAN KESELAMATAN & KESIHATAN — KUALA LANGAT</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+        :root {
+            --primary: #1e3a8a;
+            --accent: #2563eb;
+            --secondary: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-500: #6b7280;
+            --gray-700: #374151;
+            --shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        body { 
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            min-height: 100vh; 
+            padding: 20px; 
+        }
+        .container { 
+            background: white; 
+            border-radius: 16px; 
+            box-shadow: var(--shadow); 
+            width: 100%; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 30px; 
+        }
+        .demo-badge { 
+            background: var(--gray-100); 
+            color: var(--gray-700); 
+            font-size: 0.75rem; 
+            padding: 6px 14px; 
+            border-radius: 20px; 
+            text-align: center; 
+            margin-bottom: 15px; 
+            font-weight: 600; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 6px; 
+            border: 1px solid var(--gray-200); 
+        }
+        .header-group { text-align: center; margin-bottom: 25px; }
+        h1 { color: var(--primary); font-size: 1.6rem; margin-bottom: 5px; }
+        h2 { font-size: 1.2rem; color: var(--primary); margin: 20px 0 10px; }
+        h3 { font-size: 1rem; color: var(--gray-700); margin: 15px 0 8px; }
+        .subtitle { color: var(--secondary); font-size: 1rem; font-weight: 500; }
+        .hint { font-size: 0.85rem; color: var(--gray-500); margin-top: 10px; line-height: 1.5; }
+        .welcome-box { 
+            background: #eef2ff; 
+            padding: 15px 20px; 
+            border-radius: 10px; 
+            margin-bottom: 20px; 
+            border-left: 4px solid var(--accent); 
+        }
+        .user-info { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: var(--gray-100); 
+            padding: 12px 18px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+            flex-wrap: wrap; 
+            gap: 10px; 
+        }
+        .panel { display: none; }
+        .panel.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .narrow { max-width: 500px; margin: 0 auto; }
+        .toast { 
+            position: fixed; top: 20px; right: 20px; background: var(--success); 
+            color: white; padding: 16px 24px; border-radius: 10px; 
+            box-shadow: var(--shadow); z-index: 2000; transform: translateX(120%); 
+            transition: transform 0.4s ease; max-width: 360px; 
+        }
+        .toast.show { transform: translateX(0); }
+        .input-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--gray-700); }
+        input, select, textarea { 
+            width: 100%; padding: 12px 14px; border: 2px solid var(--gray-200); 
+            border-radius: 8px; font-size: 1rem; transition: border-color 0.2s; 
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+        button { 
+            padding: 12px 18px; background: var(--accent); color: white; 
+            border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; 
+            cursor: pointer; transition: background 0.3s; 
+        }
+        button:hover { background: #1d4ed8; }
+        .btn-secondary { background: var(--gray-500); }
+        .btn-secondary:hover { background: #4b5563; }
+        .btn-small { padding: 8px 14px; font-size: 0.9rem; width: auto; }
+        .btn-danger { background: var(--danger); }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-success { background: var(--success); }
+        .link-btn { 
+            background: none; border: none; color: var(--accent); padding: 0; 
+            width: auto; font-weight: 500; text-decoration: underline; cursor: pointer; 
+        }
+        .error { color: var(--danger); margin-top: 10px; text-align: center; display: none; font-weight: 500; }
+        .info-msg { color: #0b76b9; margin-top: 10px; text-align: center; display: none; font-weight: 500; }
+        .flash-card { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
+        .card { 
+            flex: 1; min-width: 240px; padding: 25px 15px; border: 3px solid var(--gray-200); 
+            border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s; 
+        }
+        .card:hover { border-color: var(--accent); transform: translateY(-3px); }
+        .card.security { border-left: 4px solid var(--warning); }
+        .card.health { border-left: 4px solid var(--success); }
+        .form-row { display: flex; gap: 12px; flex-wrap: wrap; }
+        .form-row .input-group { flex: 1; min-width: 200px; }
+        textarea { resize: vertical; min-height: 90px; }
+        .back-link { display: inline-block; margin-top: 15px; color: var(--accent); text-decoration: none; }
+        .student-row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+        .student-row input { flex: 1; min-width: 200px; }
+        .remove-btn { padding: 8px 12px; width: auto; background: var(--danger); }
+        .tag { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+        .tag.keselamatan { background: #fef3c7; color: #92400e; }
+        .tag.kesihatan { background: #d1fae5; color: #065f46; }
+        .section-box { 
+            background: var(--gray-50); padding: 18px; border-radius: 10px; 
+            margin: 15px 0; border-left: 3px solid var(--success); 
+        }
+        .checkbox-row { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+        .checkbox-row input { width: auto; margin: 0; }
+        .preview-img { max-width: 200px; margin-top: 10px; border-radius: 8px; display: none; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem; }
+        th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--gray-200); vertical-align: top; }
+        th { background: var(--primary); color: white; white-space: nowrap; }
+        tr:hover { background: var(--gray-50); }
+        .empty { text-align: center; padding: 40px; color: var(--gray-500); }
+        .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; background: var(--gray-50); padding: 15px; border-radius: 10px; align-items: flex-end; }
+        .filter-bar .input-group { margin-bottom: 0; min-width: 180px; flex: 1; }
+        .hidden { display: none !important; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .name-cell { font-weight: 600; color: var(--primary); }
+        
+        @media(max-width: 768px) {
+            .container { padding: 20px; }
+            .flash-card { flex-direction: column; }
+            .form-row { flex-direction: column; }
+            table { font-size: 0.75rem; }
+            th, td { padding: 6px 4px; }
+        }
+    </style>
+
+<script>
+        const USER_CODE = '1010';
+        const ADMIN_CODE = 'admin100';
+        const ADMIN_PASSWORD = 'admin100';
+        const DEFAULT_APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwaXCXsSFFp48CPvBLcmemmaCClO5YrArKcdWUi8nTUj-h6fL3QygSCEk_K2Np6F28W/exec';
+        const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1QlZRhuxpnn1S86oiBt1I-aOcx2vDKRB3SJeQ2GPmefM/edit';
+        function getAppsScriptUrl() {
+            const saved = localStorage.getItem('pasti_appscript_url');
+            if (!saved || saved.includes('AKfycbzcB') || saved.includes('AKfycbxgMhzr8-5iUTbd9A9fKFtkptu03Tb1R4FOkJZFHQvD915jP2RpAzGeVsZR9_alxy18') || saved.includes('AKfycbwaXCXsSFFp48CPvBLcmemmaCClO5YrArKcdWUi8nTUj-h6fL3QygSCEk_K2Np6F28W')) {
+                return DEFAULT_APPSCRIPT_URL;
+            }
+            return saved || DEFAULT_APPSCRIPT_URL;
+        }
+        let APPSCRIPT_URL = getAppsScriptUrl();
+        const STORAGE_KEY = 'laporan_klg_data';
+        const ADMIN_SESSION = 'laporan_admin_login';
+
+        let reporterName = '';
+
+        function openAppsScriptModal() {
+            document.getElementById('modalAppsScript').style.display = 'flex';
+            document.getElementById('dispAppsScriptUrl').textContent = getAppsScriptUrl();
+            document.getElementById('inputCustomUrl').value = getAppsScriptUrl();
+            document.getElementById('testConnResult').style.display = 'none';
+        }
+
+        function closeAppsScriptModal() {
+            document.getElementById('modalAppsScript').style.display = 'none';
+        }
+
+        function testAppsScriptConnection() {
+            const url = getAppsScriptUrl();
+            const resDiv = document.getElementById('testConnResult');
+            const btn = document.getElementById('btnTestConn');
+            
+            resDiv.style.display = 'block';
+            resDiv.style.background = '#f0fdf4';
+            resDiv.style.color = '#166534';
+            resDiv.style.border = '1px solid #bbf7d0';
+            resDiv.innerHTML = '⏳ Menghubungkan ke Google Apps Script...';
+            if (btn) btn.disabled = true;
+
+            fetch(url)
+            .then(res => res.text())
+            .then(text => {
+                if (btn) btn.disabled = false;
+                let parsed;
+                try { parsed = JSON.parse(text); } catch(e) {}
+
+                if (text.includes('Cannot read properties of null') || (parsed && parsed.status === 'ralat')) {
+                    resDiv.style.background = '#fef2f2';
+                    resDiv.style.color = '#991b1b';
+                    resDiv.style.border = '1px solid #fecaca';
+                    resDiv.innerHTML = `<strong>⚠️ Sambungan Ditemui Tetapi Ada Ralat:</strong><br>${parsed ? parsed.mesej : text}`;
+                } else if (text.includes('SISTEM LAPORAN') || (parsed && parsed.status === 'berjaya')) {
+                    resDiv.style.background = '#ecfdf5';
+                    resDiv.style.color = '#065f46';
+                    resDiv.style.border = '1px solid #a7f3d0';
+                    resDiv.innerHTML = `<strong>🟢 Sambungan Berjaya!</strong><br>Google Apps Script aktif dan sedia menerima data.`;
+                } else {
+                    resDiv.style.background = '#fffbeb';
+                    resDiv.style.color = '#92400e';
+                    resDiv.style.border = '1px solid #fde68a';
+                    resDiv.innerHTML = `<strong>ℹ️ Respons Diterima:</strong><br><pre style="white-space:pre-wrap; font-size:0.75rem;">${text.substring(0, 200)}</pre>`;
+                }
+            })
+            .catch(err => {
+                if (btn) btn.disabled = false;
+                resDiv.style.background = '#fef2f2';
+                resDiv.style.color = '#991b1b';
+                resDiv.style.border = '1px solid #fecaca';
+                resDiv.innerHTML = `<strong>❌ Ralat Sambungan:</strong> Gagal menghubungi URL (${err.message}).`;
+            });
+        }
+
+        function saveCustomAppsScriptUrl() {
+            const u = document.getElementById('inputCustomUrl').value.trim();
+            if (!u) { alert('Sila masukkan URL sah!'); return; }
+            localStorage.setItem('pasti_appscript_url', u);
+            APPSCRIPT_URL = u;
+            document.getElementById('dispAppsScriptUrl').textContent = u;
+            showToast('✅ URL Disimpan!', 'Pautan Google Apps Script dikemaskini.');
+        }
+
+        function resetAppsScriptUrl() {
+            localStorage.setItem('pasti_appscript_url', DEFAULT_APPSCRIPT_URL);
+            APPSCRIPT_URL = DEFAULT_APPSCRIPT_URL;
+            document.getElementById('dispAppsScriptUrl').textContent = DEFAULT_APPSCRIPT_URL;
+            document.getElementById('inputCustomUrl').value = DEFAULT_APPSCRIPT_URL;
+            showToast('🔄 URL Dipulihkan', 'Pautan asal dipulihkan.');
+        }
+
+        function copyAppsScriptCode() {
+            const box = document.getElementById('appScriptCodeBox');
+            box.select();
+            document.execCommand('copy');
+            showToast('📋 Disalin!', 'Kod Apps Script disalin ke papan keratan.');
+        }
+
+        function showToast(msg, sub='') {
+            const t = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = msg;
+            document.getElementById('toastSubtext').textContent = sub;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 4000);
+        }
+
+        function showPanel(id) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</head>
+<body>
+    <!-- TOAST -->
+    <div class="toast" id="toast" role="alert">
+        <p id="toastMessage"></p>
+        <small id="toastSubtext"></small>
+    </div>
+
+    <div class="container">
+        <div style="text-align:center; margin-bottom:10px;">
+            <div class="demo-badge">🧪 SISTEM LAPORAN KUALA LANGAT</div>
+        </div>
+
+        <div class="header-group">
+            <h1>LAPORAN KESELAMATAN & KESIHATAN</h1>
+            <p class="subtitle">KAWASAN KUALA LANGAT</p>
+            <p class="hint">Kod Pelapor: <b>1010</b> | Kod Admin: <b>admin100</b> | Kata Laluan: <b>admin100</b></p>
+            <div style="text-align:center; margin-top:6px;"><span onclick="openAppsScriptModal()" style="display:inline-flex; align-items:center; gap:5px; font-size:0.75rem; background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0; padding:4px 12px; border-radius:12px; font-weight:600; cursor:pointer; box-shadow:0 1px 3px rgba(0,0,0,0.05);" title="Klik untuk semak status atau tetapan sambungan Google Sheet">☁️ Google Apps Script (Klik untuk Semak Status) ⚙️</span></div>
+        </div>
+
+        <!-- PANEL 1: KOD AKSES -->
+        <div class="panel active narrow" id="panelCode">
+            <div class="input-group">
+                <label>Kod Akses</label>
+                <input type="text" id="accessCode" placeholder="Masukkan kod akses...">
+            </div>
+            <button onclick="verifyCode()">Teruskan</button>
+            <div class="error" id="codeError">❌ Kod tidak sah!</div>
+            <div class="info-msg" id="adminRedirect">✅ Kod Pentadbir — sedang masuk...</div>
+        </div>
+
+        <!-- PANEL 2: LOG MASUK ADMIN -->
+        <div class="panel narrow" id="panelAdminLogin">
+            <h3 style="text-align:center; margin-bottom:20px;">🔐 LOG MASUK PENTADBIR</h3>
+            <div class="input-group">
+                <label>Kata Laluan Admin</label>
+                <input type="password" id="adminPass" placeholder="Masukkan kata laluan...">
+            </div>
+            <button onclick="doAdminLogin()">Log Masuk</button>
+            <div class="error" id="adminLoginError">❌ Kata laluan salah! Cuba: <b>admin100</b></div>
+            <a class="back-link" onclick="showPanel('panelCode')">← Kembali</a>
+        </div>
+
+        <!-- PANEL 3: NAMA PELAPOR -->
+        <div class="panel narrow" id="panelReporterName">
+            <h3 style="text-align:center; margin-bottom:20px;">👤 MAKLUMAT PELAPOR</h3>
+            <div class="input-group">
+                <label>Nama Pelapor / Guru Kanan</label>
+                <input type="text" id="reporterName" placeholder="MASUKKAN NAMA ANDA..." oninput="convertToUppercase(this)">
+            </div>
+            <button onclick="saveReporterName()">Teruskan</button>
+        </div>
+
+        <!-- PANEL 4: PILIH JENIS LAPORAN -->
+        <div class="panel" id="panelCategory">
+            <div class="user-info">
+                <span><strong>Pelapor:</strong> <span id="dispName"></span></span>
+                <div style="display:flex; gap:8px;">
+                    <button class="link-btn" onclick="showHistory()">📜 Sejarah</button>
+                    <button class="btn-small btn-secondary" onclick="endSession()">Tamat</button>
+                </div>
+            </div>
+            <div class="welcome-box">
+                <p>Selamat datang, <span id="welcomeName"></span>! Sila pilih jenis laporan.</p>
+            </div>
+            <div class="flash-card">
+                <div class="card security" onclick="selectType('keselamatan')">
+                    <h3>🛡️ KESELAMATAN</h3>
+                    <p>Laporan isu keselamatan</p>
+                </div>
+                <div class="card health" onclick="selectType('kesihatan')">
+                    <h3>🏥 KESIHATAN</h3>
+                    <p>Laporan kesihatan & penyakit</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANEL 5: BORANG KESELAMATAN -->
+        <div class="panel" id="panelSecurityForm">
+            <div class="user-info">
+                <span><strong>Pelapor:</strong> <span id="secUserName"></span></span>
+                <div style="display:flex; gap:8px;">
+                    <button class="link-btn" onclick="showHistory()">📜 Sejarah</button>
+                    <button class="btn-small btn-secondary" onclick="backToCat()">Kembali</button>
+                </div>
+            </div>
+            <h2 style="text-align:center;">📋 LAPORAN KESELAMATAN</h2>
+            <form id="secForm">
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Tarikh *</label>
+                        <input type="date" id="secDate" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Masa *</label>
+                        <input type="time" id="secTime" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Nama Pasti / Lokasi *</label>
+                    <input type="text" id="secLocation" oninput="convertToUppercase(this)" required placeholder="CONTOH: SK SERI INDAH / TAMAN MAJU">
+                </div>
+                <div class="input-group">
+                    <label>Masalah Dihadapi *</label>
+                    <textarea id="secProblem" oninput="convertToUppercase(this)" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Keperluan / Tindakan Diperlukan *</label>
+                    <textarea id="secNeed" oninput="convertToUppercase(this)" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label>No. Telefon *</label>
+                    <input type="tel" id="secPhone" required>
+                </div>
+                <button type="submit">HANTAR LAPORAN</button>
+            </form>
+        </div>
+
+        <!-- PANEL 6: BORANG KESIHATAN -->
+        <div class="panel" id="panelHealthForm">
+            <div class="user-info">
+                <span><strong>Pelapor:</strong> <span id="hUserName"></span></span>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <button class="link-btn" onclick="showHistory()">📜 Sejarah</button>
+                    <button class="btn-small btn-secondary" onclick="backToCat()">Kembali</button>
+                </div>
+            </div>
+            <h2 style="text-align:center;">🏥 LAPORAN KESIHATAN</h2>
+            <form id="healthForm">
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Tarikh Laporan *</label>
+                        <input type="date" id="hDate" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Masa *</label>
+                        <input type="time" id="hTime" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Nama Pasti / Sekolah / Lokasi *</label>
+                    <input type="text" id="hLocation" oninput="convertToUppercase(this)" required placeholder="CONTOH: SMK BUKIT KUANG / PUSAT KOMUNITI TELOK PANGGA">
+                </div>
+
+                <div class="input-group">
+                    <label>Kategori Masalah *</label>
+                    <select id="hCategory" onchange="toggleDiseaseList()" required>
+                        <option value="">-- PILIH KATEGORI --</option>
+                        <option value="PENYAKIT BERJANGKIT">PENYAKIT BERJANGKIT</option>
+                        <option value="LAPORAN SANITASI">LAPORAN SANITASI</option>
+                    </select>
+                </div>
+
+                <div id="diseaseSection" class="hidden section-box">
+                    <h3>🦠 JENIS PENYAKIT BERJANGKIT *</h3>
+                    <div class="input-group">
+                        <select id="diseaseType" onchange="toggleOtherDisease()">
+                            <option value="">-- PILIH JENIS SAKIT --</option>
+                            <option value="COVID-19">COVID-19</option>
+                            <option value="HFMD">HFMD (Penyakit Tangan, Kaki & Mulut)</option>
+                            <option value="RABIES">RABIES</option>
+                            <option value="INFLUENZA">INFLUENZA</option>
+                            <option value="CHICKEN POX">CHICKEN POX (Cacar Air)</option>
+                            <option value="LAIN-LAIN">LAIN-LAIN (Nyatakan)</option>
+                        </select>
+                    </div>
+                    <div class="input-group hidden" id="otherDiseaseInput">
+                        <label>Nyatakan Penyakit</label>
+                        <input type="text" id="diseaseOther" placeholder="NAMA PENYAKIT..." oninput="convertToUppercase(this)">
+                    </div>
+
+                    <h3>👥 MAKLUMAT PELAJAR</h3>
+                    <div class="input-group">
+                        <label>Jumlah Pelajar Terlibat</label>
+                        <input type="number" id="studentCount" min="1" placeholder="0" oninput="updateStudentRows()">
+                    </div>
+                    <div id="studentNamesContainer"></div>
+                    <button type="button" class="btn-small btn-success" style="margin:5px 0;" onclick="addStudentRow()">+ TAMBAH NAMA PELAJAR</button>
+                    
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label>Tempoh Kuarantin</label>
+                            <input type="text" id="quarantinePeriod" placeholder="CONTOH: 7 HARI / 14 HARI">
+                        </div>
+                        <div class="input-group">
+                            <label>Tarikh Disahkan</label>
+                            <input type="date" id="confirmedDate">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Nota / Maklumat Tambahan</label>
+                        <textarea id="appScriptCodeBox" readonly style="width:100%; height:180px; font-family:monospace; font-size:0.72rem; padding:10px; border:1px solid #cbd5e1; border-radius:8px; background:#f8fafc; color:#0f172a; box-sizing:border-box;">/**
+ * =========================================================================
+ * SISTEM LAPORAN KESELAMATAN &amp; KESIHATAN PASTI KAWASAN KUALA LANGAT
+ * Google Apps Script (Backend Bersih / Clean Backend - Tiada UI)
+ * =========================================================================
+ * 
+ * SPESIFIKASI UTAMA:
+ * 1. Backend (doPost/doGet) HANYA memproses logik perniagaan, fail bulanan pelbagai fail (Multi-File),
+ *    folder tahunan (Cth: &quot;LAPORAN KESELAMATAN PASTI 2026&quot;), serta memulangkan respons JSON standard.
+ * 2. Automasi Fail Bulanan &amp; Folder Tahun: Cipta fail baharu di Drive mengikut bulan &amp; tahun data 
+ *    (Cth: &quot;SISTEM LAPORAN PASTI - OKTOBER 2026&quot;) di dalam folder tahunan khusus.
+ * 3. Sokongan penuh CRUD, Sesi Pengguna, Log Keluar, Padam Rekod, dan Bacaan Data Langsung.
+ */
+
+const SISTEM_CONFIG = {
+  ZON_MASA: &quot;Asia/Kuala_Lumpur&quot;,
+  INDUK_FOLDER_NAMA_UTAMA: &quot;LAPORAN KESELAMATAN PASTI&quot;
+};
+
+// SKEMA PIAWAIAN JADUAL SISTEM
+const SYSTEM_SCHEMAS = {
+  USERS: {
+    sheetName: &quot;SENARAI PENGGUNA&quot;,
+    headers: [
+      &quot;Tarikh &amp; Masa Akses&quot;,
+      &quot;Nama Pengguna / Pelapor&quot;,
+      &quot;Peranan / Jenis Sesi&quot;,
+      &quot;Kod Akses Digunakan&quot;,
+      &quot;Status Sesi&quot;,
+      &quot;ID Sesi&quot;
+    ],
+    bg: &quot;#d1fae5&quot;,
+    color: &quot;#065f46&quot;
+  },
+  SECURITY: {
+    sheetName: &quot;LAPORAN KESELAMATAN&quot;,
+    headers: [
+      &quot;ID REKOD&quot;, &quot;TARIKH&quot;, &quot;MASA&quot;, &quot;NAMA PELAPOR (SESI)&quot;, 
+      &quot;NAMA PENUH / PASTI&quot;, &quot;MASALAH YANG DIHADAPI&quot;, 
+      &quot;KEPERLUAN YANG DIKEHENDAKI&quot;, &quot;NO. TELEFON&quot;, 
+      &quot;STATUS&quot;, &quot;DICIPTA PADA&quot;
+    ],
+    bg: &quot;#fef3c7&quot;,
+    color: &quot;#92400e&quot;
+  },
+  HEALTH: {
+    sheetName: &quot;LAPORAN KESIHATAN&quot;,
+    headers: [
+      &quot;ID REKOD&quot;, &quot;TARIKH&quot;, &quot;MASA&quot;, &quot;NAMA PELAPOR (SESI)&quot;, 
+      &quot;NAMA PENUH / PASTI&quot;, &quot;KATEGORI MASALAH&quot;, &quot;JENIS SAKIT&quot;, 
+      &quot;JENIS SAKIT (LAIN-LAIN)&quot;, &quot;JUMLAH PELAJAR TERLIBAT&quot;, 
+      &quot;NAMA PELAJAR TERLIBAT&quot;, &quot;TEMPOH KUARANTIN (HARI)&quot;, 
+      &quot;TARIKH DISAHKAN&quot;, &quot;LAPORAN TELAH DIHANTAR&quot;, 
+      &quot;MAKLUMAN KEPADA JKP&quot;, &quot;SANITASI TELAH DILAKUKAN&quot;, 
+      &quot;GAMBAR / LAMPIRAN&quot;, &quot;NO. TELEFON PELAPOR&quot;, 
+      &quot;NOTA / MAKLUMAT TAMBAHAN&quot;, &quot;STATUS&quot;, &quot;DICIPTA PADA&quot;
+    ],
+    bg: &quot;#dbeafe&quot;,
+    color: &quot;#1e40af&quot;
+  },
+  ALL_REPORTS: {
+    sheetName: &quot;LAPORAN PENUH&quot;,
+    headers: [
+      &quot;JENIS LAPORAN&quot;, &quot;ID REKOD&quot;, &quot;TARIKH&quot;, &quot;MASA&quot;, &quot;NAMA PELAPOR (SESI)&quot;, 
+      &quot;NAMA PENUH / PASTI&quot;, &quot;KATEGORI / MASALAH&quot;, &quot;BUTIRAN / MAKLUMAT&quot;, 
+      &quot;NO. TELEFON&quot;, &quot;STATUS&quot;, &quot;DICIPTA PADA&quot;
+    ],
+    bg: &quot;#e0e7ff&quot;,
+    color: &quot;#3730a3&quot;
+  }
+};
+
+/**
+ * Dapatkan nama bulan dan tahun berdasarkan tarikh rekod atau semasa
+ */
+function dapatkanInfoBulanDanTahun(tarikhStr, customMonth) {
+  var d = new Date();
+  var bulanText = &quot;&quot;;
+  var tahunText = String(d.getFullYear());
+
+  if (customMonth &amp;&amp; customMonth.trim() !== &quot;&quot;) {
+    bulanText = customMonth.trim().toUpperCase();
+    var matchTahun = bulanText.match(/\d{4}/);
+    if (matchTahun) {
+      tahunText = matchTahun[0];
+    }
+    return { bulan: bulanText, tahun: tahunText };
+  }
+
+  if (tarikhStr) {
+    try {
+      var parts = tarikhStr.split(/[-/]/);
+      if (parts.length === 3) {
+        if (parts[0].length === 4) {
+          d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        } else {
+          d = new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
+        }
+      }
+    } catch(e) {}
+  }
+
+  if (isNaN(d.getTime())) {
+    d = new Date();
+  }
+
+  tahunText = String(d.getFullYear());
+  var pilihan = { timeZone: SISTEM_CONFIG.ZON_MASA, month: &#x27;long&#x27;, year: &#x27;numeric&#x27; };
+  bulanText = d.toLocaleDateString(&#x27;ms-MY&#x27;, pilihan).toUpperCase();
+
+  return { bulan: bulanText, tahun: tahunText };
+}
+
+/**
+ * Mencari atau mencipta folder tahunan (Cth: &quot;LAPORAN KESELAMATAN PASTI 2026&quot;)
+ */
+function dapatkanAtauCiptaFolderTahun(tahun) {
+  var namaFolderUtama = SISTEM_CONFIG.INDUK_FOLDER_NAMA_UTAMA + &quot; &quot; + tahun;
+  var folders = DriveApp.getFoldersByName(namaFolderUtama);
+  if (folders.hasNext()) {
+    return folders.next();
+  }
+  return DriveApp.createFolder(namaFolderUtama);
+}
+
+/**
+ * Fungsi Automasi Multi-File: Mencari atau mencipta fail Google Sheet bulanan di Drive
+ * (Cth: &quot;SISTEM LAPORAN PASTI - OKTOBER 2026&quot;)
+ */
+function pastikanFailBulananSedia(tarikhStr, customMonth) {
+  var info = dapatkanInfoBulanDanTahun(tarikhStr, customMonth);
+  var namaFailBulanan = &quot;SISTEM LAPORAN PASTI - &quot; + info.bulan;
+  var folderTahun = dapatkanAtauCiptaFolderTahun(info.tahun);
+
+  var failBaruDicipta = false;
+  var failIterator = folderTahun.getFilesByName(namaFailBulanan);
+  var buku = null;
+
+  if (failIterator.hasNext()) {
+    var failSedia = failIterator.next();
+    buku = SpreadsheetApp.openById(failSedia.getId());
+  } else {
+    buku = SpreadsheetApp.create(namaFailBulanan);
+    var failBaru = DriveApp.getFileById(buku.getId());
+    
+    // Alihkan ke dalam folder tahunan
+    DriveApp.getRootFolder().removeFile(failBaru);
+    folderTahun.addFile(failBaru);
+
+    // Buang helaian lalai &#x27;Helaian 1&#x27;
+    var helaianLalai = buku.getSheetByName(&quot;Helaian 1&quot;);
+    if (helaianLalai) {
+      try { buku.deleteSheet(helaianLalai); } catch(e) {}
+    }
+
+    failBaruDicipta = true;
+  }
+
+  semakDanCiptaSemuaHelaianUtama(buku);
+
+  return {
+    buku: buku,
+    namaFail: namaFailBulanan,
+    bulan: info.bulan,
+    tahun: info.tahun,
+    failBaruDicipta: failBaruDicipta,
+    spreadsheetId: buku.getId(),
+    spreadsheetUrl: buku.getUrl()
+  };
+}
+
+/**
+ * Semak dan pastikan header Baris 1 sepadan tanpa merosakkan data bawah
+ */
+function checkAndFixSheetHeader(sheet, schema) {
+  if (!sheet) return { action: &quot;Helaian tidak wujud&quot;, headers: [] };
+  
+  var standardHeaders = schema.headers;
+  var lastCol = 0;
+  var lastRow = 0;
+  
+  try {
+    lastCol = sheet.getLastColumn();
+    lastRow = sheet.getLastRow();
+  } catch(e) {}
+  
+  var currentHeaders = [];
+  if (lastRow &gt;= 1 &amp;&amp; lastCol &gt;= 1) {
+    try {
+      var headerValues = sheet.getRange(1, 1, 1, lastCol).getValues();
+      if (headerValues &amp;&amp; headerValues[0]) {
+        currentHeaders = headerValues[0].map(function(item) {
+          return (item || &quot;&quot;).toString().trim();
+        });
+      }
+    } catch(e) {}
+  }
+  
+  var isMatch = true;
+  if (currentHeaders.length !== standardHeaders.length) {
+    isMatch = false;
+  } else {
+    for (var i = 0; i &lt; standardHeaders.length; i++) {
+      if ((currentHeaders[i] || &quot;&quot;).toLowerCase() !== standardHeaders[i].toLowerCase()) {
+        isMatch = false;
+        break;
+      }
+    }
+  }
+  
+  if (!isMatch) {
+    var colsToClear = Math.max(lastCol, standardHeaders.length);
+    try {
+      sheet.getRange(1, 1, 1, colsToClear).clearContent();
+    } catch(e) {}
+    
+    sheet.getRange(1, 1, 1, standardHeaders.length).setValues([standardHeaders]);
+    sheet.getRange(1, 1, 1, standardHeaders.length)
+      .setFontWeight(&quot;bold&quot;)
+      .setBackground(schema.bg)
+      .setFontColor(schema.color);
+      
+    try {
+      sheet.setFrozenRows(1);
+    } catch(e) {}
+    
+    return { action: &quot;Diperbaharui/Dijana Semula&quot;, headers: standardHeaders };
+  }
+  
+  return { action: &quot;Sah &amp; Sepadan&quot;, headers: currentHeaders };
+}
+
+function semakDanCiptaSemuaHelaianUtama(buku) {
+  var logs = [];
+  for (var key in SYSTEM_SCHEMAS) {
+    var schema = SYSTEM_SCHEMAS[key];
+    var sheet = buku.getSheetByName(schema.sheetName);
+    if (!sheet) {
+      sheet = buku.insertSheet(schema.sheetName);
+      logs.push(&quot;[&quot; + schema.sheetName + &quot;] - Helaian baharu dicipta.&quot;);
+    }
+    var result = checkAndFixSheetHeader(sheet, schema);
+    logs.push(&quot;• &quot; + schema.sheetName + &quot; (&quot; + result.action + &quot;)&quot;);
+  }
+  return logs;
+}
+
+/**
+ * Pemetaan Data Pintar
+ */
+function mapDataToRow(headers, data) {
+  var row = [];
+  for (var i = 0; i &lt; headers.length; i++) {
+    var h = (headers[i] || &quot;&quot;).toString().toLowerCase().trim();
+    var val = &quot;&quot;;
+    
+    if (h.includes(&quot;tarikh &amp; masa&quot;) || (h.includes(&quot;tarikh&quot;) &amp;&amp; h.includes(&quot;masa&quot;))) {
+      val = (data.date ? data.date + &quot; &quot; + (data.time || &quot;&quot;) : data.timestamp || data.createdAt || &quot;&quot;);
+    } else if (h === &quot;tarikh&quot; || h.includes(&quot;tarikh mula&quot;) || h.includes(&quot;tarikh kejadian&quot;)) {
+      val = data.date || &quot;&quot;;
+    } else if (h === &quot;masa&quot; || h.includes(&quot;masa kejadian&quot;)) {
+      val = data.time || &quot;&quot;;
+    } else if (h.includes(&quot;status&quot;)) {
+      if (data.type === &quot;akses_pengguna&quot; || data.action === &quot;logUserAccess&quot;) {
+        val = data.status || &quot;AKTIF&quot;;
+      } else {
+        val = (data.status === &quot;resolved&quot; ? &quot;SELESAI&quot; : &quot;MENUNGGU&quot;);
+      }
+    } else if (h.includes(&quot;pasti&quot;) || h.includes(&quot;lokasi&quot;) || h.includes(&quot;cawangan&quot;) || h.includes(&quot;nama penuh&quot;)) {
+      val = data.fullName || data.location || &quot;&quot;;
+    } else if (h.includes(&quot;pelapor&quot;) || h.includes(&quot;pengguna&quot;) || h.includes(&quot;nama guru&quot;)) {
+      val = data.userName || data.reporter || &quot;&quot;;
+    } else if (h.includes(&quot;jenis penyakit&quot;) || (h.includes(&quot;penyakit&quot;) &amp;&amp; !h.includes(&quot;lain&quot;))) {
+      val = data.diseaseType === &quot;LAIN-LAIN&quot; ? (data.diseaseOther || &quot;LAIN-LAIN&quot;) : (data.diseaseType || data.problem || &quot;&quot;);
+    } else if (h.includes(&quot;penyakit lain&quot;) || h.includes(&quot;lain-lain&quot;)) {
+      val = data.diseaseOther || &quot;&quot;;
+    } else if (h.includes(&quot;kategori&quot;)) {
+      val = data.kategoriMasalah || data.healthCategory || (data.type || &quot;&quot;).toUpperCase();
+    } else if (h.includes(&quot;masalah&quot;) || h.includes(&quot;keterangan&quot;)) {
+      val = data.masalah || data.problem || &quot;&quot;;
+    } else if (h.includes(&quot;keperluan&quot;)) {
+      val = data.keperluan || data.need || &quot;-&quot;;
+    } else if (h.includes(&quot;telefon&quot;) || h.includes(&quot;tel&quot;) || h.includes(&quot;hp&quot;)) {
+      val = data.telefon || data.phone || &quot;-&quot;;
+    } else if (h.includes(&quot;bilangan&quot;) || h.includes(&quot;jumlah pelajar&quot;)) {
+      val = data.jumlahPelajar || data.studentCount || &quot;-&quot;;
+    } else if (h.includes(&quot;senarai&quot;) || h.includes(&quot;nama pelajar&quot;)) {
+      val = Array.isArray(data.namaPelajar) ? data.namaPelajar.join(&quot;, &quot;) : (data.namaPelajar || (Array.isArray(data.studentNames) ? data.studentNames.join(&quot;, &quot;) : (data.studentNames || &quot;-&quot;)));
+    } else if (h.includes(&quot;kuarantin&quot;)) {
+      val = data.tempohKuarantin || data.quarantinePeriod || &quot;-&quot;;
+    } else if (h.includes(&quot;sah&quot;)) {
+      val = data.tarikhDisahkan || data.confirmedDate || &quot;-&quot;;
+    } else if (h.includes(&quot;sanitasi&quot;)) {
+      val = (data.sanitasiDilakukan || data.sanitationDone) ? &quot;YA&quot; : &quot;TIDAK&quot;;
+    } else if (h.includes(&quot;pkd&quot;) || h.includes(&quot;laporan telah dihantar&quot;)) {
+      val = (data.laporanDihantar || data.reportSubmitted) ? &quot;YA&quot; : &quot;TIDAK&quot;;
+    } else if (h.includes(&quot;jkp&quot;)) {
+      val = (data.maklumanJKP || data.notifyJKP) ? &quot;YA&quot; : &quot;TIDAK&quot;;
+    } else if (h.includes(&quot;gambar&quot;) || h.includes(&quot;lampiran&quot;)) {
+      const gbr = data.gambarSanitasi || data.sanitationPhoto;
+      val = gbr ? (&quot;✅ DILAMPIRKAN (&quot; + Math.round(gbr.length / 1024) + &quot; KB)&quot;) : &quot;TIADA&quot;;
+    } else if (h.includes(&quot;nota&quot;) || h.includes(&quot;catatan&quot;)) {
+      val = data.notaPelajar || data.diseaseNote || &quot;-&quot;;
+    } else if (h.includes(&quot;peranan&quot;) || h.includes(&quot;sesi&quot;)) {
+      val = data.sessionType || &quot;Sesi Pelapor&quot;;
+    } else if (h.includes(&quot;kod&quot;)) {
+      val = data.kodAkses || data.code || &quot;1010&quot;;
+    } else if (h.includes(&quot;id&quot;)) {
+      val = String(data.id || data.idPengguna || (&quot;ID-&quot; + Date.now()));
+    } else if (h.includes(&quot;dihantar&quot;) || h.includes(&quot;dicipta&quot;) || h.includes(&quot;created&quot;)) {
+      val = data.createdAt || new Date().toLocaleString(&quot;ms-MY&quot;);
+    }
+    
+    row.push(val);
+  }
+  return row;
+}
+
+/**
+ * Pemetaan Data Khas untuk Helaian Gabungan &quot;LAPORAN PENUH&quot;
+ */
+function mapDataToAllReportsRow(headers, data, jenisLaporanText) {
+  var row = [];
+  for (var i = 0; i &lt; headers.length; i++) {
+    var h = (headers[i] || &quot;&quot;).toString().toLowerCase().trim();
+    var val = &quot;&quot;;
+
+    if (h.includes(&quot;jenis laporan&quot;)) {
+      val = jenisLaporanText.toUpperCase();
+    } else if (h.includes(&quot;id&quot;)) {
+      val = String(data.id || (&quot;ID-&quot; + Date.now()));
+    } else if (h.includes(&quot;tarikh&quot;) &amp;&amp; !h.includes(&quot;masa&quot;)) {
+      val = data.date || &quot;&quot;;
+    } else if (h.includes(&quot;masa&quot;) &amp;&amp; !h.includes(&quot;tarikh&quot;)) {
+      val = data.time || &quot;&quot;;
+    } else if (h.includes(&quot;pelapor&quot;) || h.includes(&quot;sesi&quot;)) {
+      val = data.userName || data.reporter || &quot;&quot;;
+    } else if (h.includes(&quot;pasti&quot;) || h.includes(&quot;lokasi&quot;)) {
+      val = data.fullName || data.location || &quot;&quot;;
+    } else if (h.includes(&quot;kategori&quot;) || h.includes(&quot;masalah&quot;)) {
+      val = data.masalah || data.kategoriMasalah || data.diseaseType || data.problem || &quot;-&quot;;
+    } else if (h.includes(&quot;butiran&quot;) || h.includes(&quot;maklumat&quot;)) {
+      val = data.keperluan || data.notaPelajar || data.diseaseNote || &quot;-&quot;;
+    } else if (h.includes(&quot;telefon&quot;) || h.includes(&quot;tel&quot;)) {
+      val = data.telefon || data.phone || &quot;-&quot;;
+    } else if (h.includes(&quot;status&quot;)) {
+      val = (data.status === &quot;resolved&quot; ? &quot;SELESAI&quot; : &quot;MENUNGGU&quot;);
+    } else if (h.includes(&quot;dicipta&quot;) || h.includes(&quot;created&quot;)) {
+      val = data.createdAt || new Date().toLocaleString(&quot;ms-MY&quot;);
+    }
+
+    row.push(val);
+  }
+  return row;
+}
+
+/**
+ * Permintaan GET (Backend Bersih)
+ */
+function doGet(e) {
+  try {
+    var action = (e &amp;&amp; e.parameter &amp;&amp; e.parameter.action) ? e.parameter.action : &quot;&quot;;
+    var targetDate = (e &amp;&amp; e.parameter &amp;&amp; e.parameter.date) ? e.parameter.date : &quot;&quot;;
+    var targetMonth = (e &amp;&amp; e.parameter &amp;&amp; e.parameter.month) ? e.parameter.month : &quot;&quot;;
+    
+    var infoBulan = pastikanFailBulananSedia(targetDate, targetMonth);
+    var nowTimestamp = new Date().toLocaleString(&quot;ms-MY&quot;, { timeZone: SISTEM_CONFIG.ZON_MASA });
+    
+    if (action === &quot;readData&quot; || action === &quot;getSheetData&quot;) {
+      var requestedSheet = (e &amp;&amp; e.parameter &amp;&amp; e.parameter.sheet) ? e.parameter.sheet : SYSTEM_SCHEMAS.ALL_REPORTS.sheetName;
+      var targetSheetObj = infoBulan.buku.getSheetByName(requestedSheet);
+      if (!targetSheetObj) targetSheetObj = infoBulan.buku.getSheetByName(SYSTEM_SCHEMAS.ALL_REPORTS.sheetName);
+      
+      var rowsData = [];
+      var headersList = [];
+      if (targetSheetObj &amp;&amp; targetSheetObj.getLastRow() &gt;= 1 &amp;&amp; targetSheetObj.getLastColumn() &gt;= 1) {
+        var allValues = targetSheetObj.getDataRange().getValues();
+        if (allValues.length &gt; 0) {
+          headersList = allValues[0];
+          rowsData = allValues.slice(1);
+        }
+      }
+      var allSheetNamesList = infoBulan.buku.getSheets().map(function(s) { return s.getName(); });
+
+      return ContentService.createTextOutput(
+        JSON.stringify({
+          status: &quot;berjaya&quot;,
+          sheetName: targetSheetObj ? targetSheetObj.getName() : requestedSheet,
+          headers: headersList,
+          rows: rowsData,
+          totalRows: rowsData.length,
+          fileName: infoBulan.namaFail,
+          failBaruDicipta: infoBulan.failBaruDicipta,
+          sheetUrl: infoBulan.spreadsheetUrl,
+          availableSheets: allSheetNamesList,
+          syncTimestamp: nowTimestamp
+        })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    return ContentService.createTextOutput(
+      JSON.stringify({
+        status: &quot;berjaya&quot;,
+        mesej: &quot;Backend Google Apps Script Beroperasi Sepenuhnya&quot;,
+        currentFile: infoBulan.namaFail,
+        failBaruDicipta: infoBulan.failBaruDicipta,
+        sheetUrl: infoBulan.spreadsheetUrl,
+        syncTimestamp: nowTimestamp
+      })
+    ).setMimeType(ContentService.MimeType.JSON);
+
+  } catch (err) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ status: &quot;ralat&quot;, mesej: err.toString() })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+/**
+ * Permintaan POST (Backend Bersih - Menguruskan Multi-File, CRUD, dan Status)
+ */
+function doPost(e) {
+  var lock = LockService.getScriptLock();
+  lock.tryLock(15000);
+  
+  try {
+    var data = {};
+    if (e &amp;&amp; e.postData &amp;&amp; e.postData.contents) {
+      try {
+        data = JSON.parse(e.postData.contents);
+      } catch (jsonErr) {
+        data = e.parameter || {};
+      }
+    } else if (e &amp;&amp; e.parameter) {
+      data = e.parameter;
+    }
+
+    var action = (data.action || &quot;&quot;).toString();
+    var targetDate = data.date || data.tarikh || &quot;&quot;;
+    var targetMonth = data.customMonth || data.bulanTersuai || &quot;&quot;;
+    
+    // Automasi Fail Bulanan mengikut tarikh rekod atau bulan semasa
+    var infoBulan = pastikanFailBulananSedia(targetDate, targetMonth);
+    var buku = infoBulan.buku;
+    var nowTimestamp = new Date().toLocaleString(&quot;ms-MY&quot;, { timeZone: SISTEM_CONFIG.ZON_MASA });
+
+    // 1. Semak Status / Header
+    if (action === &quot;checkHeaders&quot; || action === &quot;initHeaders&quot; || action === &quot;checkStatus&quot;) {
+      var logs = semakDanCiptaSemuaHelaianUtama(buku);
+      var sheetsInfo = [];
+      for (var key in SYSTEM_SCHEMAS) {
+        var sc = SYSTEM_SCHEMAS[key];
+        var sh = buku.getSheetByName(sc.sheetName);
+        if (sh) {
+          sheetsInfo.push({ sheetName: sc.sheetName, rowCount: sh.getLastRow(), colCount: sh.getLastColumn() });
+        }
+      }
+      return ContentService.createTextOutput(
+        JSON.stringify({ 
+          status: &quot;berjaya&quot;, 
+          mesej: &quot;Fail bulanan [&quot; + infoBulan.namaFail + &quot;] disahkan!&quot;, 
+          failBaruDicipta: infoBulan.failBaruDicipta,
+          details: logs, 
+          sheets: sheetsInfo,
+          sheetUrl: infoBulan.spreadsheetUrl,
+          syncTimestamp: nowTimestamp
+        })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 2. Baca Data Langsung (Read Data)
+    if (action === &quot;readData&quot; || action === &quot;getSheetData&quot;) {
+      var targetSheetName = data.sheet || SYSTEM_SCHEMAS.ALL_REPORTS.sheetName;
+      var sObj = buku.getSheetByName(targetSheetName);
+      if (!sObj) sObj = buku.getSheetByName(SYSTEM_SCHEMAS.ALL_REPORTS.sheetName);
+      
+      var hList = [];
+      var rList = [];
+      if (sObj &amp;&amp; sObj.getLastRow() &gt;= 1 &amp;&amp; sObj.getLastColumn() &gt;= 1) {
+        var vals = sObj.getDataRange().getValues();
+        if (vals.length &gt; 0) {
+          hList = vals[0];
+          rList = vals.slice(1);
+        }
+      }
+      var sheetNames = buku.getSheets().map(function(s) { return s.getName(); });
+
+      return ContentService.createTextOutput(
+        JSON.stringify({
+          status: &quot;berjaya&quot;,
+          sheetName: sObj ? sObj.getName() : targetSheetName,
+          headers: hList,
+          rows: rList,
+          totalRows: rList.length,
+          fileName: infoBulan.namaFail,
+          failBaruDicipta: infoBulan.failBaruDicipta,
+          sheetUrl: infoBulan.spreadsheetUrl,
+          availableSheets: sheetNames,
+          syncTimestamp: nowTimestamp
+        })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 3. Kemas Kini Status (Update Status)
+    if (action === &quot;updateStatus&quot; || data.tindakan === &quot;updateStatus&quot;) {
+      var idToFind = String(data.id || &quot;&quot;);
+      var targetStatus = data.status === &quot;resolved&quot; ? &quot;SELESAI&quot; : &quot;MENUNGGU&quot;;
+      var updatedSheets = [];
+      var allSheets = buku.getSheets();
+
+      for (var s = 0; s &lt; allSheets.length; s++) {
+        var sObj = allSheets[s];
+        var lRow = 0, lCol = 0;
+        try {
+          lRow = sObj.getLastRow();
+          lCol = sObj.getLastColumn();
+        } catch(err) {}
+
+        if (lRow &gt; 1 &amp;&amp; lCol &gt;= 1) {
+          try {
+            var sHeaders = sObj.getRange(1, 1, 1, lCol).getValues()[0];
+            var idCol = -1, statusCol = -1;
+            for (var c = 0; c &lt; sHeaders.length; c++) {
+              var hName = (sHeaders[c] || &quot;&quot;).toString().toLowerCase();
+              if (hName.includes(&quot;id&quot;)) idCol = c + 1;
+              if (hName.includes(&quot;status&quot;)) statusCol = c + 1;
+            }
+            if (idCol !== -1 &amp;&amp; statusCol !== -1) {
+              var idValues = sObj.getRange(2, idCol, lRow - 1, 1).getValues();
+              for (var r = 0; r &lt; idValues.length; r++) {
+                if (String(idValues[r][0]) === idToFind) {
+                  sObj.getRange(r + 2, statusCol).setValue(targetStatus);
+                  updatedSheets.push(sObj.getName());
+                }
+              }
+            }
+          } catch(err) {}
+        }
+      }
+      return ContentService.createTextOutput(
+        JSON.stringify({ 
+          status: &quot;berjaya&quot;, 
+          mesej: &quot;Status ID &quot; + idToFind + &quot; ditukar kepada \&quot;&quot; + targetStatus + &quot;\&quot; dalam fail [&quot; + infoBulan.namaFail + &quot;]&quot;, 
+          updatedSheets: updatedSheets,
+          failBaruDicipta: infoBulan.failBaruDicipta,
+          syncTimestamp: nowTimestamp
+        })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 4. Padam Rekod (Delete Record)
+    if (action === &quot;deleteRecord&quot; || data.tindakan === &quot;padam_rekod&quot;) {
+      var delId = String(data.id || &quot;&quot;);
+      var deletedFrom = [];
+      var sheetsForDel = buku.getSheets();
+
+      for (var sIdx = 0; sIdx &lt; sheetsForDel.length; sIdx++) {
+        var sheetObj = sheetsForDel[sIdx];
+        var lastR = 0, lastC = 0;
+        try {
+          lastR = sheetObj.getLastRow();
+          lastC = sheetObj.getLastColumn();
+        } catch(err) {}
+
+        if (lastR &gt; 1 &amp;&amp; lastC &gt;= 1) {
+          try {
+            var hdrs = sheetObj.getRange(1, 1, 1, lastC).getValues()[0];
+            var colId = -1;
+            for (var cIdx = 0; cIdx &lt; hdrs.length; cIdx++) {
+              if ((hdrs[cIdx] || &quot;&quot;).toString().toLowerCase().includes(&quot;id&quot;)) {
+                colId = cIdx + 1;
+                break;
+              }
+            }
+            if (colId !== -1) {
+              var idList = sheetObj.getRange(2, colId, lastR - 1, 1).getValues();
+              for (var rIdx = idList.length - 1; rIdx &gt;= 0; rIdx--) {
+                if (String(idList[rIdx][0]) === delId) {
+                  sheetObj.deleteRow(rIdx + 2);
+                  deletedFrom.push(sheetObj.getName());
+                }
+              }
+            }
+          } catch(err) {}
+        }
+      }
+
+      return ContentService.createTextOutput(
+        JSON.stringify({
+          status: &quot;berjaya&quot;,
+          mesej: &quot;Rekod ID &quot; + delId + &quot; dipadam dari fail [&quot; + infoBulan.namaFail + &quot;]&quot;,
+          deletedId: delId,
+          deletedFrom: deletedFrom,
+          failBaruDicipta: infoBulan.failBaruDicipta,
+          syncTimestamp: nowTimestamp
+        })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 5. Log Keluar Pengguna (Logout User)
+    if (action === &quot;logoutUser&quot; || data.tindakan === &quot;log_keluar&quot;) {
+      var sessId = String(data.id || data.idSesi || &quot;&quot;);
+      var uName = String(data.userName || data.reporter || &quot;&quot;).trim();
+      var logoutTimeText = data.logoutTime || new Date().toLocaleTimeString(&quot;ms-MY&quot;);
+      var statusLogout = String(data.status || (&quot;LOG KELUAR (&quot; + logoutTimeText + &quot;)&quot;));
+      
+      var schemaUser = SYSTEM_SCHEMAS.USERS;
+      var sheetUser = buku.getSheetByName(schemaUser.sheetName);
+      var updated = false;
+
+      if (sheetUser &amp;&amp; sheetUser.getLastRow() &gt; 1 &amp;&amp; sheetUser.getLastColumn() &gt;= 1) {
+        var lastR = sheetUser.getLastRow();
+        var lastC = sheetUser.getLastColumn();
+        var uHeaders = sheetUser.getRange(1, 1, 1, lastC).getValues()[0];
+        var colId = -1, colStatus = -1, colName = -1;
+
+        for (var c = 0; c &lt; uHeaders.length; c++) {
+          var hLower = (uHeaders[c] || &quot;&quot;).toString().toLowerCase();
+          if (hLower.includes(&quot;id&quot;)) colId = c + 1;
+          if (hLower.includes(&quot;status&quot;)) colStatus = c + 1;
+          if (hLower.includes(&quot;nama&quot;) || hLower.includes(&quot;pelapor&quot;) || hLower.includes(&quot;pengguna&quot;)) colName = c + 1;
+        }
+
+        if (colStatus !== -1) {
+          var allRows = sheetUser.getRange(2, 1, lastR - 1, lastC).getValues();
+          for (var r = allRows.length - 1; r &gt;= 0; r--) {
+            var rowId = colId !== -1 ? String(allRows[r][colId - 1] || &quot;&quot;) : &quot;&quot;;
+            var rowName = colName !== -1 ? String(allRows[r][colName - 1] || &quot;&quot;).trim() : &quot;&quot;;
+            var currentStatus = String(allRows[r][colStatus - 1] || &quot;&quot;);
+
+            if ((sessId &amp;&amp; rowId === sessId) || (!sessId &amp;&amp; uName &amp;&amp; rowName.toLowerCase() === uName.toLowerCase() &amp;&amp; currentStatus.includes(&quot;AKTIF&quot;))) {
+              sheetUser.getRange(r + 2, colStatus).setValue(statusLogout);
+              updated = true;
+              break;
+            }
+          }
+        }
+      }
+
+      return ContentService.createTextOutput(
+        JSON.stringify({
+          status: &quot;berjaya&quot;,
+          mesej: updated ? (&quot;Sesi [&quot; + (uName || sessId) + &quot;] ditamatkan (&quot; + statusLogout + &quot;)&quot;) : &quot;Sesi ditamatkan&quot;,
+          failBaruDicipta: infoBulan.failBaruDicipta,
+          syncTimestamp: nowTimestamp
+        })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 6. Pendaftaran Pengguna / Log Akses
+    var type = (data.jenisLaporan || data.type || &quot;keselamatan&quot;).toLowerCase();
+    if (data.tindakan === &quot;daftar_pengguna&quot; || action === &quot;logUserAccess&quot; || type === &quot;akses_pengguna&quot;) {
+      var schemaUser = SYSTEM_SCHEMAS.USERS;
+      var sheetUser = buku.getSheetByName(schemaUser.sheetName);
+      if (!sheetUser) sheetUser = buku.insertSheet(schemaUser.sheetName);
+      checkAndFixSheetHeader(sheetUser, schemaUser);
+
+      var headersUser = sheetUser.getRange(1, 1, 1, sheetUser.getLastColumn()).getValues()[0];
+      sheetUser.appendRow(mapDataToRow(headersUser, data));
+
+      return ContentService.createTextOutput(
+        JSON.stringify({ 
+          status: &quot;berjaya&quot;, 
+          mesej: &quot;Log akses direkodkan ke fail [&quot; + infoBulan.namaFail + &quot;]&quot;, 
+          failBaruDicipta: infoBulan.failBaruDicipta,
+          sheetUrl: infoBulan.spreadsheetUrl,
+          syncTimestamp: nowTimestamp
+        })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // 7. Simpan Laporan Keselamatan / Kesihatan
+    var schema = SYSTEM_SCHEMAS.SECURITY;
+    var jenisLaporanText = &quot;KESELAMATAN&quot;;
+
+    if (type.includes(&quot;kesihatan&quot;)) {
+      schema = SYSTEM_SCHEMAS.HEALTH;
+      jenisLaporanText = &quot;KESIHATAN&quot;;
+    }
+
+    var namaHelaianInduk = schema.sheetName;
+    var namaHelaianSemua = SYSTEM_SCHEMAS.ALL_REPORTS.sheetName;
+
+    // A. Simpan ke Helaian Khusus dalam Fail Bulanan
+    var sheetInduk = buku.getSheetByName(namaHelaianInduk);
+    if (!sheetInduk) sheetInduk = buku.insertSheet(namaHelaianInduk);
+    checkAndFixSheetHeader(sheetInduk, schema);
+    var headersInduk = sheetInduk.getRange(1, 1, 1, sheetInduk.getLastColumn()).getValues()[0];
+    sheetInduk.appendRow(mapDataToRow(headersInduk, data));
+
+    // B. Simpan ke Helaian Gabungan (&quot;LAPORAN PENUH&quot;)
+    var schemaAll = SYSTEM_SCHEMAS.ALL_REPORTS;
+    var sheetSemua = buku.getSheetByName(namaHelaianSemua);
+    if (!sheetSemua) sheetSemua = buku.insertSheet(namaHelaianSemua);
+    checkAndFixSheetHeader(sheetSemua, schemaAll);
+    var headersSemua = sheetSemua.getRange(1, 1, 1, sheetSemua.getLastColumn()).getValues()[0];
+    sheetSemua.appendRow(mapDataToAllReportsRow(headersSemua, data, jenisLaporanText));
+
+    var mesejKejayaan = &quot;✅ Laporan berjaya dihantar dan direkodkan ke fail bulanan [&quot; + infoBulan.namaFail + &quot;]&quot;;
+    if (infoBulan.failBaruDicipta) {
+      mesejKejayaan = &quot;📅 Notifikasi Sistem: Fail bulanan baharu [&quot; + infoBulan.namaFail + &quot;] telah berjaya dicipta, dan laporan berjaya direkodkan!&quot;;
+    }
+
+    return ContentService.createTextOutput(
+      JSON.stringify({ 
+        status: &quot;berjaya&quot;, 
+        mesej: mesejKejayaan, 
+        fileName: infoBulan.namaFail,
+        failBaruDicipta: infoBulan.failBaruDicipta,
+        sheetUrl: infoBulan.spreadsheetUrl,
+        syncTimestamp: nowTimestamp
+      })
+    ).setMimeType(ContentService.MimeType.JSON);
+
+  } catch (err) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ status: &quot;ralat&quot;, mesej: err.toString() })
+    ).setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    try { lock.releaseLock(); } catch(err) {}
+  }
+}
+</textarea>
+            </div>
+            
+            <div style="text-align:right; margin-top:18px;">
+                <button onclick="closeAppsScriptModal()" style="background:#64748b; color:white; border:none; padding:8px 18px; border-radius:8px; font-weight:600; font-size:0.85rem; cursor:pointer;">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
